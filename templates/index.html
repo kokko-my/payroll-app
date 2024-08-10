@@ -1,7 +1,21 @@
+{% from '_formhelpers.html' import render_field %}
 {% extends 'base.html' %}
 {% block title %}
     Home - {{ super() }}
 {% endblock %}
 {% block content %}
-    <h1>Hello World</h1>
+    <h1>給与計算アプリ</h1>
+    <p>給与計算を行います。勤務先情報と出勤・退勤時刻を入力してください。</p>
+    <div class="row">
+        <form method="POST">
+            {{ workplace_form.csrf_token }}
+            {{ worktime_form.csrf_token }}
+            {{ render_field(workplace_form.name) }}
+            {{ render_field(workplace_form.hourly)}}
+            {{ workplace_form.submit }}
+            {{ render_field(worktime_form.start_time) }}
+            {{ render_field(worktime_form.end_time) }}
+            {{ worktime_form.submit }}
+        </form>
+    </div>
 {% endblock %}
