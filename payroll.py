@@ -1,0 +1,44 @@
+# payroll.py
+
+class Salary:
+    def __init__(self, hourly_wage, start_time, end_time):
+        # time ex: 17時半 -> 17.5
+        self.hourly_wage = hourly_wage
+        self.start_time = start_time
+        self.end_time = end_time
+
+    def calc_salary(self):
+        pass
+
+class NormalSalary(Salary):
+    # 通常の時給で計算
+    def calc_salary(self):
+        start_time = self.start_time
+        end_time = self.end_time
+        if end_time < start_time:
+            end_time += 24.0
+        return self.hourly_wage * (end_time - start_time)
+
+class NightSalary(Salary):
+    # 深夜帯の時給で計算
+    NIGHT_SURCHARGE_RATE = 0.25
+
+    def calc_salary(self):
+        start_time = 22.0
+        end_time = self.end_time
+        if end_time <= 22.0:
+            return 0
+        return self.hourly_wage * self.NIGHT_SURCHARGE_RATE * (end_time - start_time)
+
+class OvertimeSalary(Salary):
+    # 時間外労働の時給で計算
+    LEGAL_WORKING_HOURS = 8.0
+    OVERTIME_SURCHARGE_RATE = 0.25
+
+    def calc_salary(self, break_time):
+        start_time = self.start_time
+        end_time = self.end_time
+        if end_time - start_time <= self.LEGAL_WORKING_HOURS + break_time:
+            return 0
+        return self.hourly_wage * self.OVERTIME_SURCHARGE_RATE \
+            * (end_time - start_time - self.LEGAL_WORKING_HOURS - break_time)

@@ -5,17 +5,22 @@
 {% endblock %}
 {% block content %}
     <h1>給与計算アプリ</h1>
-    <p>給与計算を行います。勤務先情報と出勤・退勤時刻を入力してください。</p>
+    <p>給与計算を行います。勤務先情報と出勤・退勤時刻および休憩開始・終了時刻を入力してください。</p>
     <div class="row">
         <form method="POST">
             {{ workplace_form.csrf_token }}
             {{ worktime_form.csrf_token }}
             {{ render_field(workplace_form.name) }}
-            {{ render_field(workplace_form.hourly)}}
+            {{ render_field(workplace_form.hourly) }}
             {{ workplace_form.submit }}
             {{ render_field(worktime_form.start_time) }}
             {{ render_field(worktime_form.end_time) }}
+            {{ render_field(worktime_form.break_start_time) }}
+            {{ render_field(worktime_form.break_end_time) }}
             {{ worktime_form.submit }}
         </form>
     </div>
+    {% if salary %}
+        <p>給料は{{ salary | int }}円です。</p>
+    {% endif %}
 {% endblock %}
