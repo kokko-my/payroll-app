@@ -5,9 +5,9 @@ from flask import Flask, render_template, request
 from flask_wtf import FlaskForm
 from wtforms.fields import (
     SubmitField, StringField, IntegerField,
-    FloatField
+    SelectField,
 )
-from wtforms.validators import DataRequired, NumberRange
+from wtforms.validators import DataRequired
 
 from payroll import (
     NormalSalary, NightSalary, OvertimeSalary
@@ -27,23 +27,35 @@ class WorkplaceForm(FlaskForm):
         '勤務先の名前: ', validators=[DataRequired()]
     )
     hourly = IntegerField(
-        '時給: ', validators=[DataRequired()]
+        '時給: ', validators=[DataRequired()],
     )
     submit = SubmitField('登録')
 
 # 勤務時間登録フォーム
 class WorktimeForm(FlaskForm):
-    start_time = FloatField(
-        '出勤時刻: ', validators=[DataRequired(), NumberRange(0, 24.0)]
+    start_hour = SelectField(
+        choices=[h for h in range(0, 24)], validators=[DataRequired()], coerce=int
     )
-    end_time = FloatField(
-        '退勤時刻: ', validators=[DataRequired(), NumberRange(0, 24.0)]
+    start_minute = SelectField(
+        choices=[m for m in range(0, 60)], validators=[DataRequired()], coerce=int
     )
-    break_start_time = FloatField(
-        '休憩開始時刻: ', validators=[NumberRange(0, 24.0)]
+    end_hour = SelectField(
+        choices=[h for h in range(0, 24)], validators=[DataRequired()], coerce=int
     )
-    break_end_time = FloatField(
-        '休憩終了時刻: ', validators=[NumberRange(0, 24.0)]
+    end_minute = SelectField(
+        choices=[m for m in range(0, 60)], validators=[DataRequired()], coerce=int
+    )
+    break_start_hour = SelectField(
+        choices=[h for h in range(0, 24)], validators=[DataRequired()], coerce=int
+    )
+    break_start_minute = SelectField(
+        choices=[m for m in range(0, 60)], validators=[DataRequired()], coerce=int
+    )
+    break_end_hour = SelectField(
+        choices=[h for h in range(0, 24)], validators=[DataRequired()], coerce=int
+    )
+    break_end_minute = SelectField(
+        choices=[m for m in range(0, 60)], validators=[DataRequired()], coerce=int
     )
     submit = SubmitField('登録')
 
@@ -53,15 +65,26 @@ def index():
     workplace_form = WorkplaceForm(request.form)
     worktime_form  = WorktimeForm(request.form)
     salary = None
-    if request.method == 'POST':
+    if request.method == 'POST' and workplace_form.validate() and worktime_form.validate:
         hourly_wage = workplace_form.hourly.data
-        start_time = worktime_form.start_time.data
-        end_time = worktime_form.end_time.data
-        break_start_time = worktime_form.break_start_time.data
-        break_end_time = worktime_form.break_end_time.data
-        if break_start_time == None or break_start_time == None:
-            break_start_time = break_end_time = 0
+
+        start_hour = worktime_form.start_hour.data
+        start_minute = worktime_form.start_minute.data
+        end_hour = worktime_form.end_hour.data
+        end_minute = worktime_form.end_minute.data
+
+        break_start_hour = worktime_form.break_start_hour.data
+        break_start_minute = worktime_form.break_start_minute.data
+        break_end_hour = worktime_form.break_end_hour.data
+        break_end_minute = worktime_form.break_end_minute.data
+
+        from utils import time_operation as tp
+        start_time = tp.convert_time_to_float(start_hour, start_minute)
+        end_time = tp.convert_time_to_float(end_hour, end_minute)
+        break_start_time = tp.convert_time_to_float(break_start_hour, break_start_minute)
+        break_end_time = tp.convert_time_to_float(break_end_hour, break_end_minute)
         break_time = break_end_time - break_start_time
+
         salary = (
             NormalSalary(hourly_wage, start_time, end_time).calc_salary() \
             + NightSalary(hourly_wage, start_time, end_time).calc_salary() \

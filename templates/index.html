@@ -13,10 +13,23 @@
             {{ render_field(workplace_form.name) }}
             {{ render_field(workplace_form.hourly) }}
             {{ workplace_form.submit }}
-            {{ render_field(worktime_form.start_time) }}
-            {{ render_field(worktime_form.end_time) }}
-            {{ render_field(worktime_form.break_start_time) }}
-            {{ render_field(worktime_form.break_end_time) }}
+            <br>
+            出勤時間:
+            {{ worktime_form.start_hour }}時
+            {{ worktime_form.start_minute }}分
+            <br>
+            退勤時刻:
+            {{ worktime_form.end_hour }}時
+            {{ worktime_form.end_minute }}分
+            <br>
+            休憩開始時刻
+            {{ worktime_form.break_start_hour }}時
+            {{ worktime_form.break_start_minute }}分
+            <br>
+            休憩終了時刻
+            {{ worktime_form.break_end_hour }}時
+            {{ worktime_form.break_end_minute }}分
+            <br>
             {{ worktime_form.submit }}
         </form>
     </div>
