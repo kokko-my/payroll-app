@@ -5,7 +5,7 @@ from flask import Flask, render_template, request
 from flask_wtf import FlaskForm
 from wtforms.fields import (
     SubmitField, StringField, IntegerField,
-    SelectField,
+    SelectField, RadioField,
 )
 from wtforms.validators import DataRequired
 
@@ -57,6 +57,9 @@ class WorktimeForm(FlaskForm):
     break_end_minute = SelectField(
         choices=[m for m in range(0, 60)], validators=[DataRequired()], coerce=int
     )
+    break_radio = RadioField(
+        '休憩: ', choices=[('0', 'なし'), ('1', 'あり')], default='0'
+    )
     submit = SubmitField('登録')
 
 
@@ -84,6 +87,9 @@ def index():
         break_start_time = tp.convert_time_to_float(break_start_hour, break_start_minute)
         break_end_time = tp.convert_time_to_float(break_end_hour, break_end_minute)
         break_time = break_end_time - break_start_time
+        if worktime_form.break_radio.data == '0':
+            break_start_time = break_end_time = 0
+            break_time = 0
 
         salary = (
             NormalSalary(hourly_wage, start_time, end_time).calc_salary() \

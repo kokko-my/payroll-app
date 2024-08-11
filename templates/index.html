@@ -22,18 +22,42 @@
             {{ worktime_form.end_hour }}時
             {{ worktime_form.end_minute }}分
             <br>
-            休憩開始時刻
-            {{ worktime_form.break_start_hour }}時
-            {{ worktime_form.break_start_minute }}分
-            <br>
-            休憩終了時刻
-            {{ worktime_form.break_end_hour }}時
-            {{ worktime_form.break_end_minute }}分
-            <br>
+            {{ worktime_form.break_radio.label }}
+            {{ worktime_form.break_radio() }}
+            <div id="break", style="display: none;">
+                休憩開始時刻:
+                {{ worktime_form.break_start_hour }}時
+                {{ worktime_form.break_start_minute }}分
+                <br>
+                休憩終了時刻:
+                {{ worktime_form.break_end_hour }}時
+                {{ worktime_form.break_end_minute }}分
+                <br>
+            </div>
             {{ worktime_form.submit }}
         </form>
     </div>
     {% if salary %}
         <p>給料は{{ salary | int }}円です。</p>
     {% endif %}
+
+    <script>
+        const radios = document.querySelectorAll('input[name="break_radio"]');
+        radios.forEach(radio => {
+            radio.addEventListener('change', () => toggleInputField());
+        });
+
+        function toggleInputField() {
+            const input_field = document.getElementById('break');
+            const selected_radio = document.querySelector('input[name="break_radio"]:checked');
+            if (selected_radio && selected_radio.value === '1') {
+                input_field.style.display = 'block';
+            } else {
+                input_field.style.display = 'none';
+            }
+        }
+
+        // ページ読み込み時に実行
+        toggleInputField();
+    </script>
 {% endblock %}
