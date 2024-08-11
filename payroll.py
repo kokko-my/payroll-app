@@ -1,6 +1,7 @@
 # payroll.py
+import abc
 
-class Salary:
+class Salary(metaclass=abc.ABCMeta):
     def __init__(self, hourly_wage, start_time, end_time):
         # time ex: 17時半 -> 17.5
         self.hourly_wage = hourly_wage
@@ -9,6 +10,7 @@ class Salary:
         if self.end_time < self.start_time:
             self.end_time += 24
 
+    @abc.abstractmethod
     def calc_salary(self):
         pass
 
