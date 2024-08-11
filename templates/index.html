@@ -13,7 +13,7 @@
             {{ render_field(workplace_form.name) }}
             {{ render_field(workplace_form.hourly) }}
             {{ workplace_form.submit }}
-            <br>
+            <br><br>
             出勤時間:
             {{ worktime_form.start_hour }}時
             {{ worktime_form.start_minute }}分
@@ -56,8 +56,6 @@
                 input_field.style.display = 'none';
             }
         }
-
-        // ページ読み込み時に実行
         toggleInputField();
     </script>
 {% endblock %}

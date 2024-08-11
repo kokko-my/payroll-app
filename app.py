@@ -13,6 +13,8 @@ from payroll import (
     NormalSalary, NightSalary, OvertimeSalary
 )
 
+from utils.time_operation import convert_time_to_float
+
 basedir = os.path.abspath(os.path.dirname(__name__))
 
 app = Flask(__name__)
@@ -34,28 +36,28 @@ class WorkplaceForm(FlaskForm):
 # 勤務時間登録フォーム
 class WorktimeForm(FlaskForm):
     start_hour = SelectField(
-        choices=[h for h in range(0, 24)], validators=[DataRequired()], coerce=int
+        choices=[h for h in range(0, 24)], coerce=int, validators=[DataRequired()]
     )
     start_minute = SelectField(
-        choices=[m for m in range(0, 60)], validators=[DataRequired()], coerce=int
+        choices=[m for m in range(0, 60)], coerce=int, validators=[DataRequired()]
     )
     end_hour = SelectField(
-        choices=[h for h in range(0, 24)], validators=[DataRequired()], coerce=int
+        choices=[h for h in range(0, 24)], coerce=int, validators=[DataRequired()]
     )
     end_minute = SelectField(
-        choices=[m for m in range(0, 60)], validators=[DataRequired()], coerce=int
+        choices=[m for m in range(0, 60)], coerce=int, validators=[DataRequired()]
     )
     break_start_hour = SelectField(
-        choices=[h for h in range(0, 24)], validators=[DataRequired()], coerce=int
+        choices=[h for h in range(0, 24)], coerce=int, validators=[DataRequired()]
     )
     break_start_minute = SelectField(
-        choices=[m for m in range(0, 60)], validators=[DataRequired()], coerce=int
+        choices=[m for m in range(0, 60)], coerce=int, validators=[DataRequired()]
     )
     break_end_hour = SelectField(
-        choices=[h for h in range(0, 24)], validators=[DataRequired()], coerce=int
+        choices=[h for h in range(0, 24)], coerce=int, validators=[DataRequired()]
     )
     break_end_minute = SelectField(
-        choices=[m for m in range(0, 60)], validators=[DataRequired()], coerce=int
+        choices=[m for m in range(0, 60)], coerce=int, validators=[DataRequired()]
     )
     break_radio = RadioField(
         '休憩: ', choices=[('0', 'なし'), ('1', 'あり')], default='0'
@@ -81,11 +83,10 @@ def index():
         break_end_hour = worktime_form.break_end_hour.data
         break_end_minute = worktime_form.break_end_minute.data
 
-        from utils import time_operation as tp
-        start_time = tp.convert_time_to_float(start_hour, start_minute)
-        end_time = tp.convert_time_to_float(end_hour, end_minute)
-        break_start_time = tp.convert_time_to_float(break_start_hour, break_start_minute)
-        break_end_time = tp.convert_time_to_float(break_end_hour, break_end_minute)
+        start_time = convert_time_to_float(start_hour, start_minute)
+        end_time = convert_time_to_float(end_hour, end_minute)
+        break_start_time = convert_time_to_float(break_start_hour, break_start_minute)
+        break_end_time = convert_time_to_float(break_end_hour, break_end_minute)
         break_time = break_end_time - break_start_time
         if worktime_form.break_radio.data == '0':
             break_start_time = break_end_time = 0
