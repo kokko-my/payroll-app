@@ -2,4 +2,5 @@
 *.pyc
 **/__pycache__/**
 **/db-volumes/**
+**/migrations/**
 db.sqlite3
