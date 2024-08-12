@@ -6,6 +6,15 @@
             {% block title %}給与計算アプリ{% endblock %}
         </title>
     </head>
+    <header>
+        <nav>
+            {% block header %}
+            <h1 style="display: inline;"><a href="{{ url_for('home') }}">給与計算アプリ</a></h1>
+            <a href="{{ url_for('workplace') }}">勤務先登録</a>
+            <a href="{{ url_for('worktime') }}">勤務時間入力</a>
+            {% endblock %}
+        </nav>
+    </header>
     <body>
         {% block content %}
         {% endblock %}
