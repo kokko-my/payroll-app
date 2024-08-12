@@ -1,5 +1,4 @@
 # flaskr/forms.py
-
 from flask_wtf import FlaskForm
 from wtforms.fields import (
     SubmitField, StringField, IntegerField,
