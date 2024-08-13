@@ -4,3 +4,4 @@
 **/db-volumes/**
 **/migrations/**
 db.sqlite3
+data.sqlite
