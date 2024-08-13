@@ -2,9 +2,36 @@
 from flask_wtf import FlaskForm
 from wtforms.fields import (
     SubmitField, StringField, IntegerField,
-    SelectField, RadioField,
+    SelectField, RadioField, PasswordField,
 )
-from wtforms.validators import DataRequired
+from wtforms.validators import DataRequired, Email, EqualTo
+
+# ログインフォーム
+class LoginForm(FlaskForm):
+    email = StringField(
+        'メール: ', validators=[DataRequired(), Email()]
+    )
+    password = PasswordField(
+        'パスワード: ',
+        validators=[DataRequired(),
+        EqualTo('confirm_password', message='パスワードが一致しません')]
+    )
+    submit = SubmitField('ログイン')
+
+# アカウント登録フォーム
+class RegisterForm(FlaskForm):
+    email = StringField(
+        'メール: ', validators=[DataRequired(), Email('メールアドレスが誤っています')]
+    )
+    password = PasswordField(
+        'パスワード: ',
+        validators=[DataRequired(),
+        EqualTo('confirm_password', message='パスワードが一致しません')]
+    )
+    confirm_password = PasswordField(
+        'パスワード再入力: ', validators=[DataRequired()]
+    )
+    submit = SubmitField('登録')
 
 
 # 勤務先情報登録フォーム
