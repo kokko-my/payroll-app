@@ -16,5 +16,7 @@ def create_app():
     from flaskr.views import bp
     app.register_blueprint(bp)
     db.init_app(app)
+    with app.app_context():
+        db.create_all()
     migrate.init_app(app, db)
     return app

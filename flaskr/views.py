@@ -17,6 +17,7 @@ from flaskr.utils.time_operation import convert_time_to_float
 
 bp = Blueprint('app', __name__, url_prefix='')
 
+@bp.route('/', methods=['GET'])
 @bp.route('/home', methods=['GET'])
 def home():
     return render_template('home.html')
@@ -30,7 +31,7 @@ def logout():
 def login():
     form = LoginForm(request.form)
     if request.method == 'POST' and form.validate():
-        user = User().select_user_by_email(form.email.data)
+        user = User.select_user_by_email(form.email.data)
         if user and user.is_active:
             login_user(user, remember=True)
             next = request.args.get('next')
@@ -46,18 +47,12 @@ def register():
     form = RegisterForm(request.form)
     if request.method == 'POST' and form.validate():
         user = User(
-            username = form.username.data,
-            email = form.email.data
+            email = form.email.data,
+            password = form.password.data,
         )
         user.create_new_user()
-        token = ''
-        token = PasswordResetToken.publish_token(user)
         db.session.commit()
-        # メールに飛ばすほうがいい
-        print(
-            f'パスワード設定用URL: http://127.0.0.1:5000/reset_password/{token}'
-        )
-        flash('パスワード設定用のURLをお送りしました。ご確認ください')
+        flash('アカウントを登録しました。')
         return redirect(url_for('app.login'))
     return render_template('register.html', form=form)
 

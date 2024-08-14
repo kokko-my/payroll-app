@@ -13,8 +13,7 @@ class LoginForm(FlaskForm):
     )
     password = PasswordField(
         'パスワード: ',
-        validators=[DataRequired(),
-        EqualTo('confirm_password', message='パスワードが一致しません')]
+        validators=[DataRequired()]
     )
     submit = SubmitField('ログイン')
 
@@ -24,12 +23,11 @@ class RegisterForm(FlaskForm):
         'メール: ', validators=[DataRequired(), Email('メールアドレスが誤っています')]
     )
     password = PasswordField(
-        'パスワード: ',
-        validators=[DataRequired(),
-        EqualTo('confirm_password', message='パスワードが一致しません')]
+        'パスワード: ', validators=[DataRequired()]
     )
     confirm_password = PasswordField(
-        'パスワード再入力: ', validators=[DataRequired()]
+        'パスワード再入力: ',
+        validators=[DataRequired(), EqualTo('password', message='パスワードが一致しません')]
     )
     submit = SubmitField('登録')
 
