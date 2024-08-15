@@ -4,8 +4,11 @@ from wtforms.fields import (
     SubmitField, StringField, IntegerField,
     SelectField, RadioField, PasswordField,
 )
-from wtforms.validators import DataRequired, Email, EqualTo
+from wtforms.validators import (
+    DataRequired, Email, EqualTo, ValidationError,
+)
 from flask_login import current_user
+from flaskr.models import User
 
 # ログインフォーム
 class LoginForm(FlaskForm):
@@ -32,6 +35,9 @@ class RegisterForm(FlaskForm):
     )
     submit = SubmitField('登録')
 
+    def validate_email(self, field):
+        if User.select_user_by_email(field.data):
+            raise ValidationError('このメールアドレスはすでに登録されています')
 
 # 勤務先情報登録フォーム
 class WorkplaceForm(FlaskForm):

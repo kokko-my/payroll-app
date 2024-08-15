@@ -33,6 +33,7 @@ class User(UserMixin, db.Model):
     def select_user_by_id(cls, id):
         return cls.query.get(id)
 
+
 # パスワードリセット時に利用する
 class PasswordResetToken(db.Model):
     __tablename__ = 'password_reset_tokens'
