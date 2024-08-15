@@ -75,3 +75,24 @@ class PasswordResetToken(db.Model):
         )
         db.session.add(new_token)
         return token
+
+# 勤務先
+class UserWorkplace(db.Model):
+    __tablename__ = 'user_workplaces'
+
+    id = db.Column(db.Integer, primary_key=True)
+    user_id = db.Column(db.Integer, db.ForeignKey('users.id'), index=True)
+    name = db.Column(db.Text)
+    deadline = db.Column(db.Integer)
+    hourly = db.Column(db.Integer)
+    create_at = db.Column(db.DateTime, default=datetime.now)
+    update_at = db.Column(db.DateTime, default=datetime.now)
+
+    def __init__(self, user_id, name, deadline, hourly):
+        self.user_id = user_id
+        self.name = name
+        self.deadline = deadline
+        self.hourly = hourly
+
+    def create_new_workplace(self):
+        db.session.add(self)
