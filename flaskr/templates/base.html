@@ -7,13 +7,6 @@
         </title>
     </head>
     <header>
-        {% with messages = get_flashed_messages() %}
-            {% if messages %}
-                {% for message in messages %}
-                <div class="flash">{{ message }}</div>
-                {% endfor %}
-            {% endif %}
-        {% endwith %}
         <nav>
             {% block header %}
             <h1 style="display: inline;"><a href="{{ url_for('app.home') }}">給与計算アプリ</a></h1>
