@@ -39,6 +39,10 @@ class RegisterForm(FlaskForm):
         if User.select_user_by_email(field.data):
             raise ValidationError('このメールアドレスはすでに登録されています')
 
+    def validate_password(self, field):
+        if len(field.data) < 8:
+            raise ValidationError('パスワードは8文字以上です')
+
 # 勤務先情報登録フォーム
 class WorkplaceForm(FlaskForm):
     name = StringField(

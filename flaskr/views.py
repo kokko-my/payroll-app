@@ -32,7 +32,7 @@ def login():
     form = LoginForm(request.form)
     if request.method == 'POST' and form.validate():
         user = User.select_user_by_email(form.email.data)
-        if user and user.is_active:
+        if user and user.is_active and user.validate_password(form.password.data):
             login_user(user, remember=True)
             next = request.args.get('next')
             if not next:
@@ -42,17 +42,16 @@ def login():
             flash('存在しないユーザです')
         elif not user.is_active:
             flash('無効なユーザです。パスワードを再設定してください')
+        elif not user.validate_password(form.password.data):
+            flash('メールアドレスとパスワードの組み合わせが誤っています')
     return render_template('login.html', form=form)
 
 @bp.route('/register', methods=['GET', 'POST'])
 def register():
     form = RegisterForm(request.form)
     if request.method == 'POST' and form.validate():
-        user = User(
-            email = form.email.data,
-            password = form.password.data,
-        )
-        user.is_active = True
+        user = User(form.email.data)
+        user.save_new_password(form.password.data)
         user.create_new_user()
         db.session.commit()
         flash('アカウントを登録しました。')

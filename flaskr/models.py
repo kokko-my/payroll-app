@@ -1,5 +1,6 @@
 # flaskr/models.py
 from flaskr import db, login_manager
+from flask_bcrypt import check_password_hash, generate_password_hash
 from flask_login import UserMixin, current_user
 from datetime import datetime, timedelta
 from uuid import uuid4
@@ -13,25 +14,34 @@ class User(UserMixin, db.Model):
 
     id = db.Column(db.Integer, primary_key=True)
     email = db.Column(db.String(64), unique=True, index=True)
-    password = db.Column(db.String(128))
+    password = db.Column(
+        db.String(128),
+        default=generate_password_hash('payrollapp')
+    )
     is_active = db.Column(db.Boolean, unique=False, default=False)
     create_at = db.Column(db.DateTime, default=datetime.now)
     update_at = db.Column(db.DateTime, default=datetime.now)
 
-    def __init__(self, email, password):
+    def __init__(self, email):
         self.email = email
-        self.password = password
 
     @classmethod
     def select_user_by_email(cls, email):
         return cls.query.filter_by(email=email).first()
 
-    def create_new_user(self):
-        db.session.add(self)
-
     @classmethod
     def select_user_by_id(cls, id):
         return cls.query.get(id)
+
+    def validate_password(self, password):
+        return check_password_hash(self.password, password)
+
+    def save_new_password(self, new_password):
+        self.password = generate_password_hash(new_password)
+        self.is_active = True
+
+    def create_new_user(self):
+        db.session.add(self)
 
 
 # パスワードリセット時に利用する
