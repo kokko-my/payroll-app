@@ -5,6 +5,7 @@ from wtforms.fields import (
     SelectField, RadioField, PasswordField,
 )
 from wtforms.validators import DataRequired, Email, EqualTo
+from flask_login import current_user
 
 # ログインフォーム
 class LoginForm(FlaskForm):

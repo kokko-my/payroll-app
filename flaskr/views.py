@@ -11,7 +11,7 @@ from flaskr.models import (
     User, PasswordResetToken,
 )
 from flask_login import (
-    login_user, logout_user
+    login_user, logout_user, current_user,
 )
 from flaskr.utils.time_operation import convert_time_to_float
 
@@ -38,8 +38,10 @@ def login():
             if not next:
                 next = url_for('app.home')
             return redirect(next)
-        else:
+        elif not user:
             flash('存在しないユーザです')
+        elif not user.is_active:
+            flash('無効なユーザです。パスワードを再設定してください')
     return render_template('login.html', form=form)
 
 @bp.route('/register', methods=['GET', 'POST'])
@@ -50,6 +52,7 @@ def register():
             email = form.email.data,
             password = form.password.data,
         )
+        user.is_active = True
         user.create_new_user()
         db.session.commit()
         flash('アカウントを登録しました。')

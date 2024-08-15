@@ -1,9 +1,14 @@
 # flaskr/models.py
-from flaskr import db
+from flaskr import db, login_manager
+from flask_login import UserMixin, current_user
 from datetime import datetime, timedelta
 from uuid import uuid4
 
-class User(db.Model):
+@login_manager.user_loader
+def load_user(user_id):
+    return User.query.get(user_id)
+
+class User(UserMixin, db.Model):
     __tablename__ = 'users'
 
     id = db.Column(db.Integer, primary_key=True)
@@ -23,6 +28,10 @@ class User(db.Model):
 
     def create_new_user(self):
         db.session.add(self)
+
+    @classmethod
+    def select_user_by_id(cls, id):
+        return cls.query.get(id)
 
 # パスワードリセット時に利用する
 class PasswordResetToken(db.Model):
