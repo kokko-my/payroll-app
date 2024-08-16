@@ -8,7 +8,7 @@ from flaskr.forms import (
     LoginForm, RegisterForm, WorkplaceForm, WorktimeForm
 )
 from flaskr.models import (
-    User, PasswordResetToken,
+    User, PasswordResetToken, UserWorkplace
 )
 from flask_login import (
     login_user, logout_user, current_user,
@@ -60,10 +60,24 @@ def register():
 
 @bp.route('/workplace', methods=['GET', 'POST'])
 def workplace():
+    workplaces = current_user.workplaces.all()
+    return render_template('workplace.html', workplaces=workplaces)
+
+@bp.route('/regist_workplace', methods=['GET', 'POST'])
+def regist_workplace():
     form = WorkplaceForm(request.form)
     if request.method == 'POST' and form.validate():
-        pass
-    return render_template('workplace.html', form=form)
+        workplace = UserWorkplace(
+            user_id = current_user.get_id(),
+            name = form.name.data,
+            deadline = form.deadline.data,
+            hourly = form.hourly.data
+        )
+        workplace.create_new_workplace()
+        db.session.commit()
+        flash('勤務先を登録しました')
+        return redirect(url_for('app.workplace'))
+    return render_template('regist_workplace.html', form=form)
 
 @bp.route('/worktime', methods=['GET', 'POST'])
 def worktime():

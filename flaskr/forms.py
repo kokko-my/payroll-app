@@ -51,6 +51,9 @@ class WorkplaceForm(FlaskForm):
     hourly = IntegerField(
         '時給: ', validators=[DataRequired()],
     )
+    deadline = SelectField(
+        '締日: ', choices=[(d, str(d)) for d in range(0, 31)], coerce=int, validators=[DataRequired()]
+    )
     submit = SubmitField('登録')
 
 # 勤務時間登録フォーム

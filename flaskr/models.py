@@ -82,6 +82,7 @@ class UserWorkplace(db.Model):
 
     id = db.Column(db.Integer, primary_key=True)
     user_id = db.Column(db.Integer, db.ForeignKey('users.id'), index=True)
+    user = db.relationship('User', backref=db.backref('workplaces', lazy='dynamic'))
     name = db.Column(db.Text)
     deadline = db.Column(db.Integer)
     hourly = db.Column(db.Integer)
