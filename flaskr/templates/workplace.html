@@ -10,6 +10,7 @@
         {{ workplace.name }},
         時給:{{ workplace.hourly }}円,
         締日:{{ workplace.deadline }}日
+        <a href="{{ url_for('app.deleat_workplace', workplace_id=workplace.id) }}">削除</a>
     </li>
     <br>
 {% endfor %}

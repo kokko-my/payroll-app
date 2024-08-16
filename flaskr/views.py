@@ -1,7 +1,7 @@
 # flaskr/views.py
 from flask import (
     Blueprint, render_template, redirect, url_for, flash,
-    request
+    request, abort
 )
 from flaskr import db
 from flaskr.forms import (
@@ -78,6 +78,15 @@ def regist_workplace():
         flash('勤務先を登録しました')
         return redirect(url_for('app.workplace'))
     return render_template('regist_workplace.html', form=form)
+
+@bp.route('/deleat_workplace/<int:workplace_id>', methods=['GET'])
+def deleat_workplace(workplace_id):
+    workplace = UserWorkplace.query.get_or_404(workplace_id)
+    if workplace.user != current_user:
+        abort(403)
+    db.session.delete(workplace)
+    db.session.commit()
+    return redirect(url_for('app.workplace'))
 
 @bp.route('/worktime', methods=['GET', 'POST'])
 def worktime():
