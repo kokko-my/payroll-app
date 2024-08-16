@@ -10,7 +10,7 @@
     <select name="workplace">
         <option value="">選択してください</option>
         {% for workplace in workplaces %}
-            <option value="{{ workplace.name }}">{{ workplace.name }}</option>
+            <option value="{{ workplace.name }}">{{ workplace.name }}（時給{{ workplace.hourly }}円）</option>
         {% endfor %}
     </select>
 </div>
