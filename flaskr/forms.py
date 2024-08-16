@@ -3,6 +3,7 @@ from flask_wtf import FlaskForm
 from wtforms.fields import (
     SubmitField, StringField, IntegerField,
     SelectField, RadioField, PasswordField,
+    DateField,
 )
 from wtforms.validators import (
     DataRequired, Email, EqualTo, ValidationError,
@@ -58,6 +59,18 @@ class WorkplaceForm(FlaskForm):
 
 # 勤務時間登録フォーム
 class WorktimeForm(FlaskForm):
+    start_month = SelectField(
+        choices=[(m, str(m)) for m in range(1, 13)], coerce=int, validators=[DataRequired()]
+    )
+    start_day = SelectField(
+        choices=[(d, str(d)) for d in range(1, 32)], coerce=int, validators=[DataRequired()]
+    )
+    end_month = SelectField(
+        choices=[(m, str(m)) for m in range(1, 13)], coerce=int, validators=[DataRequired()]
+    )
+    end_day = SelectField(
+        choices=[(d, str(d)) for d in range(1, 32)], coerce=int, validators=[DataRequired()]
+    )
     start_hour = SelectField(
         choices=[(h, str(h)) for h in range(0, 24)], coerce=int, validators=[DataRequired()]
     )

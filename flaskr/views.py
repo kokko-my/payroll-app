@@ -8,7 +8,7 @@ from flaskr.forms import (
     LoginForm, RegisterForm, WorkplaceForm, WorktimeForm
 )
 from flaskr.models import (
-    User, PasswordResetToken, UserWorkplace
+    User, PasswordResetToken, UserWorkplace, UserWorktime
 )
 from flask_login import (
     login_user, logout_user, current_user,
@@ -91,6 +91,7 @@ def deleat_workplace(workplace_id):
 @bp.route('/worktime', methods=['GET', 'POST'])
 def worktime():
     form = WorktimeForm(request.form)
+    workplaces = current_user.workplaces.all()
     if request.method == 'POST' and form.validate():
         start_hour = form.start_hour.data
         start_minute = form.start_minute.data
@@ -110,4 +111,9 @@ def worktime():
         if form.break_radio.data == '0':
             break_start_time = break_end_time = 0
             break_time = 0
-    return render_template('worktime.html', form=form)
+
+        # worktime = UserWorktime(
+        #     user_id = current_user.get_id(),
+        #     start_date = 
+        # )
+    return render_template('worktime.html', form=form, workplaces=workplaces)

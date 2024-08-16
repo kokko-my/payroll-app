@@ -105,6 +105,7 @@ class UserWorktime(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     user_id = db.Column(db.Integer, db.ForeignKey('users.id'), index=True)
     user = db.relationship('User', backref=db.backref('worktime', lazy='dynamic'))
+    workplace = db.Column(db.String)
     start_date = db.Column(db.Date)
     end_date = db.Column(db.Date)
     start_time = db.Column(db.Float)
