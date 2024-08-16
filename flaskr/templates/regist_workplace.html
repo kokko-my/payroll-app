@@ -10,8 +10,10 @@
     <form method="POST">
         {{ form.csrf_token }}
         {{ render_field(form.name) }}
-        {{ render_field(form.hourly) }}
-        {{ render_field(form.deadline) }}
+        {{ form.hourly.label }} {{ form.hourly() }}円
+        <br>
+        {{ form.deadline.label }} 毎月{{ form.deadline() }}
+        <br>
         {{ form.submit }}
     </form>
 </div>
