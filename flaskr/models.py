@@ -97,3 +97,31 @@ class UserWorkplace(db.Model):
 
     def create_new_workplace(self):
         db.session.add(self)
+
+# 勤務日時
+class UserWorktime(db.Model):
+    __tablename__ = 'user_worktimes'
+
+    id = db.Column(db.Integer, primary_key=True)
+    user_id = db.Column(db.Integer, db.ForeignKey('users.id'), index=True)
+    user = db.relationship('User', backref=db.backref('worktime', lazy='dynamic'))
+    start_date = db.Column(db.Date)
+    end_date = db.Column(db.Date)
+    start_time = db.Column(db.Float)
+    end_time = db.Column(db.Float)
+    break_start_time = db.Column(db.Float)
+    break_end_time = db.Column(db.Float)
+    create_at = db.Column(db.DateTime, default=datetime.now)
+    update_at = db.Column(db.DateTime, default=datetime.now)
+
+    def __init__(self, user_id, start_date, end_date, start_time, end_time, break_start_time=0.0, break_end_time=0.0):
+        self.user_id = user_id
+        self.start_date = start_date
+        self.end_date = end_date
+        self.start_time = start_time
+        self.end_time = end_time
+        self.break_start_time = break_start_time
+        self.break_end_time = break_end_time
+
+    def create_new_workplace(self):
+        db.session.add(self)
