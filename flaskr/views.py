@@ -13,7 +13,7 @@ from flaskr.models import (
 from flask_login import (
     login_user, logout_user, current_user,
 )
-from flaskr.utils.time_operation import convert_time_to_float
+from flaskr.utils.datetime_operation import convert_time_to_float
 
 bp = Blueprint('app', __name__, url_prefix='')
 

@@ -1,4 +1,5 @@
 # flaskr/forms.py
+import datetime
 from flask_wtf import FlaskForm
 from wtforms.fields import (
     SubmitField, StringField, IntegerField,
@@ -10,6 +11,10 @@ from wtforms.validators import (
 )
 from flask_login import current_user
 from flaskr.models import User
+
+from flaskr.utils.datetime_operation import (
+    get_now_month, get_now_day, get_days_in_month
+)
 
 # ログインフォーム
 class LoginForm(FlaskForm):
@@ -60,16 +65,20 @@ class WorkplaceForm(FlaskForm):
 # 勤務時間登録フォーム
 class WorktimeForm(FlaskForm):
     start_month = SelectField(
-        choices=[(m, str(m)) for m in range(1, 13)], coerce=int, validators=[DataRequired()]
+        choices=[(m, str(m)) for m in range(1, 13)], coerce=int, validators=[DataRequired()],
+        default=get_now_month()
     )
     start_day = SelectField(
-        choices=[(d, str(d)) for d in range(1, 32)], coerce=int, validators=[DataRequired()]
+        choices=[(d, str(d)) for d in range(1, 31)], coerce=int, validators=[DataRequired()],
+        default=get_now_day()
     )
     end_month = SelectField(
-        choices=[(m, str(m)) for m in range(1, 13)], coerce=int, validators=[DataRequired()]
+        choices=[(m, str(m)) for m in range(1, 13)], coerce=int, validators=[DataRequired()],
+        default=get_now_month()
     )
     end_day = SelectField(
-        choices=[(d, str(d)) for d in range(1, 32)], coerce=int, validators=[DataRequired()]
+        choices=[(d, str(d)) for d in range(1, 31)], coerce=int, validators=[DataRequired()],
+        default=get_now_day()
     )
     start_hour = SelectField(
         choices=[(h, str(h)) for h in range(0, 24)], coerce=int, validators=[DataRequired()]
