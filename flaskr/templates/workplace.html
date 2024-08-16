@@ -1,16 +1,18 @@
 {% from '_formhelpers.html' import render_field %}
 {% extends 'base.html' %}
 {% block title %}
-    勤務先登録 - {{ super() }}
+    勤務先一覧 - {{ super() }}
 {% endblock %}
 {% block content %}
-<p>勤務先情報を入力してください。</p>
-<div class="row">
-    <form method="POST">
-        {{ form.csrf_token }}
-        {{ render_field(form.name) }}
-        {{ render_field(form.hourly) }}
-        {{ form.submit }}
-    </form>
-</div>
+<h1>勤務先一覧</h1>
+{% for workplace in workplaces %}
+    <li>
+        {{ workplace.name }},
+        時給:{{ workplace.hourly }}円,
+        締日:毎月{{ workplace.deadline }}日
+        <a href="{{ url_for('app.deleat_workplace', workplace_id=workplace.id) }}">削除</a>
+    </li>
+    <br>
+{% endfor %}
+<a href="{{ url_for('app.regist_workplace') }}">勤務先を登録する</a>
 {% endblock %}

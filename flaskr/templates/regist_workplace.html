@@ -1,0 +1,20 @@
+{% from '_formhelpers.html' import render_field %}
+{% extends 'base.html' %}
+{% block title %}
+    勤務先登録 - {{ super() }}
+{% endblock %}
+{% block content %}
+<h1>勤務先登録</h1>
+<p>勤務先情報を入力してください。</p>
+<div class="row">
+    <form method="POST">
+        {{ form.csrf_token }}
+        {{ render_field(form.name) }}
+        {{ form.hourly.label }} {{ form.hourly() }}円
+        <br>
+        {{ form.deadline.label }} 毎月{{ form.deadline() }}
+        <br>
+        {{ form.submit }}
+    </form>
+</div>
+{% endblock %}
