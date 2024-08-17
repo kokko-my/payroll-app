@@ -14,6 +14,11 @@
             <a href="{{ url_for('app.workplace') }}">勤務先一覧</a>
             <a href="{{ url_for('app.worktime') }}">勤務時間入力</a>
             <a href="{{ url_for('app.logout') }}">ログアウト</a>
+                {% if current_user.name %}
+                こんにちは。{{ current_user.name }}さん。
+                {% else %}
+                こんにちは。名無しさん。
+                {% endif %}
             {% else %}
             <a href="{{ url_for('app.login') }}">ログイン</a>
             <a href="{{ url_for('app.register') }}">新規登録</a>
