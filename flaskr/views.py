@@ -13,7 +13,8 @@ from flaskr.models import (
 from flask_login import (
     login_user, logout_user, current_user,
 )
-from flaskr.utils.datetime_operation import convert_time_to_float
+from datetime import date
+from flaskr.utils.datetime_operation import *
 
 bp = Blueprint('app', __name__, url_prefix='')
 
@@ -91,29 +92,30 @@ def deleat_workplace(workplace_id):
 @bp.route('/worktime', methods=['GET', 'POST'])
 def worktime():
     form = WorktimeForm(request.form)
-    workplaces = current_user.workplaces.all()
+    form.workplace.choices = [(wp.name, wp.name) for wp in current_user.workplaces.all()]
     if request.method == 'POST' and form.validate():
         start_hour = form.start_hour.data
         start_minute = form.start_minute.data
         end_hour = form.end_hour.data
         end_minute = form.end_minute.data
-
         break_start_hour = form.break_start_hour.data
         break_start_minute = form.break_start_minute.data
         break_end_hour = form.break_end_hour.data
         break_end_minute = form.break_end_minute.data
 
-        start_time = convert_time_to_float(start_hour, start_minute)
-        end_time = convert_time_to_float(end_hour, end_minute)
-        break_start_time = convert_time_to_float(break_start_hour, break_start_minute)
-        break_end_time = convert_time_to_float(break_end_hour, break_end_minute)
-        break_time = break_end_time - break_start_time
-        if form.break_radio.data == '0':
-            break_start_time = break_end_time = 0
-            break_time = 0
-
-        # worktime = UserWorktime(
-        #     user_id = current_user.get_id(),
-        #     start_date = 
-        # )
-    return render_template('worktime.html', form=form, workplaces=workplaces)
+        worktime = UserWorktime(
+            user_id = current_user.get_id(),
+            workplace = form.workplace.data,
+            start_date = date(get_now_year(), form.start_month.data, form.start_day.data),
+            end_date = date(get_now_year(), form.end_month.data, form.end_day.data),
+            start_time = convert_time_to_float(start_hour, start_minute),
+            end_time = convert_time_to_float(end_hour, end_minute),
+            break_start_time = convert_time_to_float(break_start_hour, break_start_minute),
+            break_end_time = convert_time_to_float(break_end_hour, break_end_minute)
+        )
+        worktime.create_new_worktime()
+        db.session.commit()
+        flash('勤務時間を登録しました')
+        return redirect(url_for('app.home'))
+    print(form.workplace.data)
+    return render_template('worktime.html', form=form)

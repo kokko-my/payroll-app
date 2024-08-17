@@ -5,18 +5,12 @@
 {% endblock %}
 {% block content %}
 <p>出勤・退勤時刻を入力してください。</p>
-<div>
-    <label for="workplace">勤務先: </label>
-    <select name="workplace">
-        <option value="">選択してください</option>
-        {% for workplace in workplaces %}
-            <option value="{{ workplace.name }}">{{ workplace.name }}（時給{{ workplace.hourly }}円）</option>
-        {% endfor %}
-    </select>
-</div>
 <div class="row">
     <form method="POST">
         {{ form.csrf_token }}
+        {{ form.workplace.label }}
+        {{ form.workplace }}
+        <br>
         出勤日時:
         {{ form.start_month }}月
         {{ form.start_day }}日

@@ -7,7 +7,7 @@ from wtforms.fields import (
     DateField,
 )
 from wtforms.validators import (
-    DataRequired, Email, EqualTo, ValidationError,
+    DataRequired, Email, EqualTo, ValidationError, InputRequired,
 )
 from flask_login import current_user
 from flaskr.models import User
@@ -55,54 +55,54 @@ class WorkplaceForm(FlaskForm):
         '勤務先の名前: ', validators=[DataRequired()]
     )
     hourly = IntegerField(
-        '時給: ', validators=[DataRequired()],
+        '時給: ', validators=[DataRequired()]
     )
     deadline = SelectField(
-        '締日: ', choices=[(d, str(d) + '日') for d in range(1, 31)] + [(31, '月末')], validators=[DataRequired()]
+        '締日: ', choices=[(d, str(d) + '日') for d in range(1, 31)] + [(31, '月末')],
+        coerce=int, validators=[DataRequired()]
     )
     submit = SubmitField('登録')
 
 # 勤務時間登録フォーム
 class WorktimeForm(FlaskForm):
+    workplace = SelectField(
+        '勤務先: ', choices=[]
+    )
     start_month = SelectField(
-        choices=[(m, str(m)) for m in range(1, 13)], coerce=int, validators=[DataRequired()],
-        default=get_now_month()
+        choices=[(m, str(m)) for m in range(1, 13)], coerce=int, default=get_now_month()
     )
     start_day = SelectField(
-        choices=[(d, str(d)) for d in range(1, 31)], coerce=int, validators=[DataRequired()],
-        default=get_now_day()
+        choices=[(d, str(d)) for d in range(1, 31)], coerce=int, default=get_now_day()
     )
     end_month = SelectField(
-        choices=[(m, str(m)) for m in range(1, 13)], coerce=int, validators=[DataRequired()],
-        default=get_now_month()
+        choices=[(m, str(m)) for m in range(1, 13)], coerce=int, default=get_now_month()
     )
     end_day = SelectField(
-        choices=[(d, str(d)) for d in range(1, 31)], coerce=int, validators=[DataRequired()],
-        default=get_now_day()
+        choices=[(d, str(d)) for d in range(1, 31)], coerce=int, default=get_now_day()
     )
     start_hour = SelectField(
-        choices=[(h, str(h)) for h in range(0, 24)], coerce=int, validators=[DataRequired()]
+        choices=[(h, str(h)) for h in range(0, 24)], coerce=int
     )
     start_minute = SelectField(
-        choices=[(m, str(m)) for m in range(0, 60)], coerce=int, validators=[DataRequired()]
+        choices=[(m, str(m)) for m in range(0, 60)], coerce=int
     )
     end_hour = SelectField(
-        choices=[(h, str(h)) for h in range(0, 24)], coerce=int, validators=[DataRequired()]
+        choices=[(h, str(h)) for h in range(0, 24)], coerce=int
     )
     end_minute = SelectField(
-        choices=[(m, str(m)) for m in range(0, 60)], coerce=int, validators=[DataRequired()]
+        choices=[(m, str(m)) for m in range(0, 60)], coerce=int
     )
     break_start_hour = SelectField(
-        choices=[(h, str(h)) for h in range(0, 24)], coerce=int, validators=[DataRequired()]
+        choices=[(h, str(h)) for h in range(0, 24)], coerce=int
     )
     break_start_minute = SelectField(
-        choices=[(m, str(m)) for m in range(0, 60)], coerce=int, validators=[DataRequired()]
+        choices=[(m, str(m)) for m in range(0, 60)], coerce=int
     )
     break_end_hour = SelectField(
-        choices=[(h, str(h)) for h in range(0, 24)], coerce=int, validators=[DataRequired()]
+        choices=[(h, str(h)) for h in range(0, 24)], coerce=int
     )
     break_end_minute = SelectField(
-        choices=[(m, str(m)) for m in range(0, 60)], coerce=int, validators=[DataRequired()]
+        choices=[(m, str(m)) for m in range(0, 60)], coerce=int
     )
     break_radio = RadioField(
         '休憩: ', choices=[('0', 'なし'), ('1', 'あり')], default='0'

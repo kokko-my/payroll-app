@@ -19,6 +19,8 @@ class User(UserMixin, db.Model):
         default=generate_password_hash('payrollapp')
     )
     is_active = db.Column(db.Boolean, unique=False, default=False)
+    workplaces = db.relationship('UserWorkplace', backref='user', lazy='dynamic')
+    worktime   = db.relationship('UserWorktime',  backref='user', lazy='dynamic')
     create_at = db.Column(db.DateTime, default=datetime.now)
     update_at = db.Column(db.DateTime, default=datetime.now)
 
@@ -82,7 +84,6 @@ class UserWorkplace(db.Model):
 
     id = db.Column(db.Integer, primary_key=True)
     user_id = db.Column(db.Integer, db.ForeignKey('users.id'), index=True)
-    user = db.relationship('User', backref=db.backref('workplaces', lazy='dynamic'))
     name = db.Column(db.Text)
     deadline = db.Column(db.Integer)
     hourly = db.Column(db.Integer)
@@ -104,8 +105,7 @@ class UserWorktime(db.Model):
 
     id = db.Column(db.Integer, primary_key=True)
     user_id = db.Column(db.Integer, db.ForeignKey('users.id'), index=True)
-    user = db.relationship('User', backref=db.backref('worktime', lazy='dynamic'))
-    workplace = db.Column(db.String)
+    workplace = db.Column(db.Text)
     start_date = db.Column(db.Date)
     end_date = db.Column(db.Date)
     start_time = db.Column(db.Float)
@@ -115,8 +115,9 @@ class UserWorktime(db.Model):
     create_at = db.Column(db.DateTime, default=datetime.now)
     update_at = db.Column(db.DateTime, default=datetime.now)
 
-    def __init__(self, user_id, start_date, end_date, start_time, end_time, break_start_time=0.0, break_end_time=0.0):
+    def __init__(self, user_id, workplace, start_date, end_date, start_time, end_time, break_start_time=0.0, break_end_time=0.0):
         self.user_id = user_id
+        self.workplace = workplace
         self.start_date = start_date
         self.end_date = end_date
         self.start_time = start_time
@@ -124,5 +125,5 @@ class UserWorktime(db.Model):
         self.break_start_time = break_start_time
         self.break_end_time = break_end_time
 
-    def create_new_workplace(self):
+    def create_new_worktime(self):
         db.session.add(self)
