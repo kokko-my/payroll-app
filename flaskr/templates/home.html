@@ -4,6 +4,7 @@
     Home - {{ super() }}
 {% endblock %}
 {% block content %}
+<br>
 {% for message in get_flashed_messages() %}
 {{ message }}
 {% endfor %}
@@ -13,8 +14,15 @@
 <li>
     {{ worktime.start_date }}: ({{ worktime.workplace }})
     {{ worktime.start_time | convert_float_to_time }} ～ {{ worktime.end_time | convert_float_to_time }}
+    {% if worktime.break_start_time == 0 and worktime.break_end_time == 0 %}
+        （休憩：なし）
+    {% else %}
+        （休憩：{{ worktime.break_start_time | convert_float_to_time }} ～ {{ worktime.break_end_time | convert_float_to_time }}）
+    {% endif %}
+    <a href="{{ url_for('app.deleat_worktime', worktime_id=worktime.id) }}">削除</a>
 </li>
 {% endfor %}
+<br>
 <a href="{{ url_for('app.worktime') }}">勤務時間を登録する</a>
 
 {% endblock %}

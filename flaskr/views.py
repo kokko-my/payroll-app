@@ -112,6 +112,8 @@ def worktime():
         end_time = convert_time_to_float(end_hour, end_minute)
         break_start_time = convert_time_to_float(break_start_hour, break_start_minute)
         break_end_time = convert_time_to_float(break_end_hour, break_end_minute)
+        if form.break_radio == '1':
+            break_start_time = break_end_time = 0
 
         # 時間のバリデーション
         if start_time > end_time:
@@ -166,3 +168,12 @@ def worktime():
         flash('勤務時間を登録しました')
         return redirect(url_for('app.home'))
     return render_template('worktime.html', form=form)
+
+@bp.route('/deleat_worktime/<int:worktime_id>', methods=['GET'])
+def deleat_worktime(worktime_id):
+    worktime = UserWorktime.query.get_or_404(worktime_id)
+    if worktime.user != current_user:
+        abort(403)
+    db.session.delete(worktime)
+    db.session.commit()
+    return redirect(url_for('app.home'))
