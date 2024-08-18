@@ -23,10 +23,16 @@ bp = Blueprint('app', __name__, url_prefix='')
 @bp.route('/', methods=['GET'])
 @bp.route('/home', methods=['GET'])
 def home():
+    if not current_user.is_authenticated:
+        return render_template('home.html')
+
     worktimes = current_user.worktime.all()
+    print(worktimes)
     total_salary = 0
     for worktime in worktimes:
         workplace = UserWorkplace.select_workplace_by_name(worktime.workplace)
+        if workplace is None:
+            continue
         salary = (
             NormalSalary(workplace.hourly, worktime.start_time, worktime.end_time).calc_salary() \
             + NightSalary(workplace.hourly, worktime.start_time, worktime.end_time).calc_salary() \
@@ -167,7 +173,10 @@ def worktime():
                 flash('時間に誤りがあります。')
                 return render_template('worktime.html', form=form)
 
+        start_time = convert_time_to_float(start_hour, start_minute)
         end_time = convert_time_to_float(end_hour, end_minute)
+        break_start_time = convert_time_to_float(break_start_hour, break_start_minute)
+        break_end_time = convert_time_to_float(break_end_hour, break_end_minute)
         worktime = UserWorktime(
             user_id = current_user.get_id(),
             workplace = form.workplace.data,
