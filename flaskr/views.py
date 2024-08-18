@@ -148,7 +148,7 @@ def worktime():
                 flash('時間に誤りがあります。')
                 return render_template('worktime.html', form=form)
         else:
-            if start_time < end_day:
+            if start_time < end_time:
                 flash('時間に誤りがあります。')
                 return render_template('worktime.html', form=form)
 
