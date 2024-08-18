@@ -11,12 +11,8 @@
 <h1>現在の給与：</h1>
 {% for worktime in worktimes %}
 <li>
-    {{ worktime.start_date }}:
-    ({{ worktime.workplace }})
-    {{ worktime.start_time | int }}時
-    {{ (worktime.start_time % 1 * 60) | round }}分～
-    {{ worktime.end_time | int }}時
-    {{ (worktime.end_time % 1 * 60) | round }}分
+    {{ worktime.start_date }}: ({{ worktime.workplace }})
+    {{ worktime.start_time | convert_float_to_time }} ～ {{ worktime.end_time | convert_float_to_time }}
 </li>
 {% endfor %}
 <a href="{{ url_for('app.worktime') }}">勤務時間を登録する</a>

@@ -21,7 +21,6 @@ bp = Blueprint('app', __name__, url_prefix='')
 @bp.route('/', methods=['GET'])
 @bp.route('/home', methods=['GET'])
 def home():
-    print(dir(current_user))
     worktimes = current_user.worktime.all()
     return render_template('home.html', worktimes=worktimes)
 

@@ -5,6 +5,8 @@ from flask_sqlalchemy import SQLAlchemy
 from flask_migrate import Migrate
 from flask_login import LoginManager
 
+from flaskr.utils.template_filters import convert_float_to_time
+
 login_manager = LoginManager()
 login_manager.login_view = 'app.view'
 login_manager.login_message = 'ログインしてください'
@@ -20,6 +22,7 @@ def create_app():
     app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
     from flaskr.views import bp
     app.register_blueprint(bp)
+    app.add_template_filter(convert_float_to_time)
     db.init_app(app)
     with app.app_context():
         db.create_all()
