@@ -21,7 +21,9 @@ bp = Blueprint('app', __name__, url_prefix='')
 @bp.route('/', methods=['GET'])
 @bp.route('/home', methods=['GET'])
 def home():
-    return render_template('home.html')
+    print(dir(current_user))
+    worktimes = current_user.worktime.all()
+    return render_template('home.html', worktimes=worktimes)
 
 @bp.route('logout')
 def logout():
@@ -149,6 +151,7 @@ def worktime():
                 flash('時間に誤りがあります。')
                 return render_template('worktime.html', form=form)
 
+        end_time = convert_time_to_float(end_hour, end_minute)
         worktime = UserWorktime(
             user_id = current_user.get_id(),
             workplace = form.workplace.data,
