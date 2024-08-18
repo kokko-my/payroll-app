@@ -4,6 +4,7 @@
     勤務時間入力 - {{ super() }}
 {% endblock %}
 {% block content %}
+{% if form.workplace.choices %}
 <p>出勤・退勤時刻を入力してください。</p>
 <div class="row">
     <form method="POST">
@@ -35,9 +36,18 @@
             {{ form.break_end_minute }}分
             <br>
         </div>
+        <br>
+            {% for message in get_flashed_messages() %}
+            {{ message }}
+            {% endfor %}
+        <br>
         {{ form.submit }}
     </form>
 </div>
+{% else %}
+<p>勤務時間を入力するには勤務先を登録してください。</p>
+<a href="{{ url_for('app.regist_workplace') }}">勤務先を登録する</a>
+{% endif %}
 
 <script>
     const radios = document.querySelectorAll('input[name="break_radio"]');
@@ -56,4 +66,5 @@
     }
     toggleInputField();
 </script>
+
 {% endblock %}
