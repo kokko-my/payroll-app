@@ -99,6 +99,10 @@ class UserWorkplace(db.Model):
     def create_new_workplace(self):
         db.session.add(self)
 
+    @classmethod
+    def select_workplace_by_name(cls, name):
+        return cls.query.filter_by(name=name).first()
+
 # 勤務日時
 class UserWorktime(db.Model):
     __tablename__ = 'user_worktimes'

@@ -9,7 +9,7 @@
 {{ message }}
 {% endfor %}
 
-<h1>現在の給与：</h1>
+<h1>現在の給与：{{ total_salary | int }}円</h1>
 {% for worktime in worktimes %}
 <li>
     {{ worktime.start_date }}: ({{ worktime.workplace }})

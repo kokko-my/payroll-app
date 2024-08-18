@@ -14,6 +14,8 @@ from flask_login import (
     login_user, logout_user, current_user,
 )
 from datetime import date
+
+from flaskr.payroll import *
 from flaskr.utils.datetime_operation import *
 
 bp = Blueprint('app', __name__, url_prefix='')
@@ -22,7 +24,20 @@ bp = Blueprint('app', __name__, url_prefix='')
 @bp.route('/home', methods=['GET'])
 def home():
     worktimes = current_user.worktime.all()
-    return render_template('home.html', worktimes=worktimes)
+    total_salary = 0
+    for worktime in worktimes:
+        workplace = UserWorkplace.select_workplace_by_name(worktime.workplace)
+        salary = (
+            NormalSalary(workplace.hourly, worktime.start_time, worktime.end_time).calc_salary() \
+            + NightSalary(workplace.hourly, worktime.start_time, worktime.end_time).calc_salary() \
+            + OvertimeSalary(workplace.hourly, worktime.start_time, worktime.end_time).calc_salary(worktime.break_end_time - worktime.break_start_time) \
+            - (
+                NormalSalary(workplace.hourly, worktime.break_start_time, worktime.break_end_time).calc_salary() \
+                + NightSalary(workplace.hourly, worktime.break_start_time, worktime.break_end_time).calc_salary()
+            )
+        )
+        total_salary += salary
+    return render_template('home.html', worktimes=worktimes, total_salary=total_salary)
 
 @bp.route('logout')
 def logout():
