@@ -66,16 +66,10 @@ class WorktimeForm(FlaskForm):
     workplace = SelectField(
         '勤務先: ', choices=[]
     )
-    start_month = SelectField(
+    work_month = SelectField(
         choices=[(m, str(m)) for m in range(1, 13)], coerce=int, default=get_now_month()
     )
-    start_day = SelectField(
-        choices=[(d, str(d)) for d in range(1, 31)], coerce=int, default=get_now_day()
-    )
-    end_month = SelectField(
-        choices=[(m, str(m)) for m in range(1, 13)], coerce=int, default=get_now_month()
-    )
-    end_day = SelectField(
+    work_day = SelectField(
         choices=[(d, str(d)) for d in range(1, 31)], coerce=int, default=get_now_day()
     )
     start_hour = SelectField(

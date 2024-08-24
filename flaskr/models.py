@@ -110,8 +110,7 @@ class UserWorktime(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     user_id = db.Column(db.Integer, db.ForeignKey('users.id'), index=True)
     workplace = db.Column(db.Text)
-    start_date = db.Column(db.Date)
-    end_date = db.Column(db.Date)
+    work_date = db.Column(db.Integer)
     start_time = db.Column(db.Float)
     end_time = db.Column(db.Float)
     break_start_time = db.Column(db.Float)
@@ -120,13 +119,12 @@ class UserWorktime(db.Model):
     update_at = db.Column(db.DateTime, default=datetime.now)
 
     def __init__(
-        self, user_id, workplace, start_date, end_date, start_time, end_time,
+        self, user_id, workplace, work_date, start_time, end_time,
         break_start_time=0.0, break_end_time=0.0
     ):
         self.user_id = user_id
         self.workplace = workplace
-        self.start_date = start_date
-        self.end_date = end_date
+        self.work_date = work_date
         self.start_time = start_time
         self.end_time = end_time
         self.break_start_time = break_start_time

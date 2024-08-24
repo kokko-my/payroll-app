@@ -113,10 +113,8 @@ def worktime():
     form = WorktimeForm(request.form)
     form.workplace.choices = [(wp.name, wp.name) for wp in current_user.workplaces.all()]
     if request.method == 'POST' and form.validate():
-        start_month = form.start_month.data
-        end_month = form.end_month.data
-        start_day = form.start_day.data
-        end_day = form.end_day.data
+        work_month = form.work_month.data
+        work_day = form.work_day.data
         start_hour = form.start_hour.data
         start_minute = form.start_minute.data
         end_hour = form.end_hour.data
@@ -148,28 +146,6 @@ def worktime():
                 flash(f'時間に誤りがあります。（{start_time}->{end_time}）')
                 return render_template('worktime.html', form=form)
 
-        # 日付のバリデーション
-        end_time = convert_time_to_float(end_hour, end_minute)
-        if start_month > end_month:
-            if not (start_month == 12 and end_month == 1):
-                flash('日付に誤りがあります。')
-                return render_template('worktime.html', form=form)
-        if start_day > end_day:
-            if not (start_day == get_days_in_month(start_month) and end_day == 1):
-                flash('日付に誤りがあります。')
-                return render_template('worktime.html', form=form)
-        elif end_day - start_day > 1:
-            flash('日付に誤りがあります。')
-            return render_template('workplace.html', form=form)
-        elif start_day == end_day:
-            if start_time > end_time:
-                flash('時間に誤りがあります。')
-                return render_template('worktime.html', form=form)
-        else:
-            if start_time < end_time:
-                flash('時間に誤りがあります。')
-                return render_template('worktime.html', form=form)
-
         start_time = convert_time_to_float(start_hour, start_minute)
         end_time = convert_time_to_float(end_hour, end_minute)
         break_start_time = convert_time_to_float(break_start_hour, break_start_minute)
@@ -177,8 +153,7 @@ def worktime():
         worktime = UserWorktime(
             user_id = current_user.get_id(),
             workplace = form.workplace.data,
-            start_date = date(get_now_year(), start_month, start_day),
-            end_date = date(get_now_year(), end_month, end_day),
+            work_date = date(get_now_year(), work_month, work_day),
             start_time = start_time,
             end_time = end_time,
             break_start_time = break_start_time,

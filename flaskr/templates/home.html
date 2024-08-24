@@ -14,7 +14,7 @@
     {% if worktimes != None %}
         {% for worktime in worktimes %}
         <li>
-            {{ worktime.start_date }}: ({{ worktime.workplace }})
+            {{ worktime.work_date }}: ({{ worktime.workplace }})
             {{ worktime.start_time | convert_float_to_time }} ～ {{ worktime.end_time | convert_float_to_time }}
             {% if worktime.break_start_time == 0 and worktime.break_end_time == 0 %}
                 （休憩：なし）
