@@ -27,27 +27,24 @@ class NightSalary(Salary):
     NIGHT_END_TIME = 5.0
     NIGHT_SURCHARGE_RATE = 0.25
 
-    def __cutout_night_worktime(self):
+    def __calc_night_worktime(self):
         start_time = self.start_time
         end_time = self.end_time
         if self.NIGHT_END_TIME <= start_time <= self.NIGHT_START_TIME:
             if end_time <= self.NIGHT_START_TIME:
-                return None, None
+                return 0
             elif end_time <= self.NIGHT_END_TIME + 24:
-                return self.NIGHT_START_TIME, end_time
+                return end_time - self.NIGHT_START_TIME
             else:
-                return self.NIGHT_START_TIME, self.NIGHT_END_TIME + 24
+                return self.NIGHT_END_TIME + 24 - self.NIGHT_START_TIME
         else:
             if end_time <= self.NIGHT_END_TIME + 24:
-                return start_time, end_time
+                return end_time - start_time
             else:
-                return start_time, self.NIGHT_END_TIME + 24
+                return self.NIGHT_END_TIME + 24 - start_time
 
     def calc_salary(self):
-        start_time, end_time = self.__cutout_night_worktime()
-        if start_time == None and end_time == None:
-            return 0
-        return self.hourly_wage * self.NIGHT_SURCHARGE_RATE * (end_time - start_time)
+        return self.hourly_wage * self.NIGHT_SURCHARGE_RATE * self.__calc_night_worktime()
 
 class OvertimeSalary(Salary):
     # 時間外労働の時給で計算
