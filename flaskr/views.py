@@ -27,20 +27,17 @@ def home():
         return render_template('home.html')
 
     worktimes = current_user.worktime.all()
-    print(worktimes)
     total_salary = 0
     for worktime in worktimes:
         workplace = UserWorkplace.select_workplace_by_name(worktime.workplace)
         if workplace is None:
             continue
-        salary = (
-            NormalSalary(workplace.hourly, worktime.start_time, worktime.end_time).calc_salary() \
-            + NightSalary(workplace.hourly, worktime.start_time, worktime.end_time).calc_salary() \
-            + OvertimeSalary(workplace.hourly, worktime.start_time, worktime.end_time).calc_salary(worktime.break_end_time - worktime.break_start_time) \
-            - (
-                NormalSalary(workplace.hourly, worktime.break_start_time, worktime.break_end_time).calc_salary() \
-                + NightSalary(workplace.hourly, worktime.break_start_time, worktime.break_end_time).calc_salary()
-            )
+        salary = calc_total_salary(
+            workplace.hourly,
+            worktime.start_time,
+            worktime.end_time,
+            worktime.break_start_time,
+            worktime.break_end_time
         )
         total_salary += salary
     return render_template('home.html', worktimes=worktimes, total_salary=total_salary)

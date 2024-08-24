@@ -61,3 +61,12 @@ class OvertimeSalary(Salary):
             return 0
         return self.hourly_wage * self.OVERTIME_SURCHARGE_RATE \
             * (end_time - start_time - self.LEGAL_WORKING_HOURS - break_time)
+
+def calc_total_salary(hourly, start_time, end_time, break_start_time, break_end_time):
+    return NormalSalary(hourly, start_time, end_time).calc_salary() \
+        + NightSalary(hourly, start_time, end_time).calc_salary() \
+        + OvertimeSalary(hourly, start_time, end_time).calc_salary(break_end_time - break_start_time) \
+        - (
+            NormalSalary(hourly, break_start_time, break_end_time).calc_salary() \
+            + NightSalary(hourly, break_start_time, break_end_time).calc_salary()
+        )
