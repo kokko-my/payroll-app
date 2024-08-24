@@ -123,46 +123,25 @@ def worktime():
         break_start_minute = form.break_start_minute.data
         break_end_hour = form.break_end_hour.data
         break_end_minute = form.break_end_minute.data
-
-        start_time = convert_time_to_float(start_hour, start_minute)
-        end_time = convert_time_to_float(end_hour, end_minute)
-        break_start_time = convert_time_to_float(break_start_hour, break_start_minute)
-        break_end_time = convert_time_to_float(break_end_hour, break_end_minute)
         if form.break_radio == '1':
-            break_start_time = break_end_time = 0
+            break_start_hour = break_start_minute = 0
+            break_end_hour = break_end_minute = 0
 
-        # 時間のバリデーション
-        if start_time > end_time:
-            end_time += 24
-        if end_time - start_time > 24:
-            flash(f'時間に誤りがあります。（{start_time}->{end_time}）')
-            return render_template('worktime.html', form=form)
-        if form.break_radio.data == '1':
-            if start_time > break_start_time:
-                break_start_time += 24
-            if break_start_time > break_end_time:
-                break_end_time += 24
-            if break_end_time > end_time:
-                flash(f'時間に誤りがあります。（{start_time}->{end_time}）')
-                return render_template('worktime.html', form=form)
-
-        start_time = convert_time_to_float(start_hour, start_minute)
-        end_time = convert_time_to_float(end_hour, end_minute)
-        break_start_time = convert_time_to_float(break_start_hour, break_start_minute)
-        break_end_time = convert_time_to_float(break_end_hour, break_end_minute)
         worktime = UserWorktime(
             user_id = current_user.get_id(),
             workplace = form.workplace.data,
             work_date = date(get_now_year(), work_month, work_day),
-            start_time = start_time,
-            end_time = end_time,
-            break_start_time = break_start_time,
-            break_end_time = break_end_time
+            start_time = convert_time_to_float(start_hour, start_minute),
+            end_time = convert_time_to_float(end_hour, end_minute),
+            break_start_time = convert_time_to_float(break_start_hour, break_start_minute),
+            break_end_time = convert_time_to_float(break_end_hour, break_end_minute)
         )
         worktime.create_new_worktime()
         db.session.commit()
         flash('勤務時間を登録しました')
         return redirect(url_for('app.home'))
+    elif request.method == 'POST':
+        flash('入力に誤りがあります')
     return render_template('worktime.html', form=form)
 
 @bp.route('/deleat_worktime/<int:worktime_id>', methods=['GET'])

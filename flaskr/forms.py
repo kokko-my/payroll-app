@@ -11,7 +11,7 @@ from flask_login import current_user
 from flaskr.models import User
 
 from flaskr.utils.datetime_operation import (
-    get_now_month, get_now_day
+    get_now_month, get_now_day, convert_time_to_float
 )
 
 # ログインフォーム
@@ -100,3 +100,22 @@ class WorktimeForm(FlaskForm):
         '休憩: ', choices=[('0', 'なし'), ('1', 'あり')], default='0'
     )
     submit = SubmitField('登録')
+
+    def validate(self):
+        if not super().validate():
+            return False
+        # 時間のバリデーション
+        start_time = convert_time_to_float(self.start_hour.data, self.start_minute.data)
+        end_time = convert_time_to_float(self.end_hour.data, self.end_minute.data)
+        break_start_time = convert_time_to_float(self.break_start_hour.data, self.break_start_minute.data)
+        break_end_time = convert_time_to_float(self.break_end_hour.data, self.break_end_minute.data)
+        if start_time > end_time:
+            end_time += 24
+        if self.break_radio.data == '1':
+            if start_time > break_start_time:
+                break_start_time += 24
+            if break_start_time > break_end_time:
+                break_end_time += 24
+            if break_end_time > end_time:
+                return False
+        return True
