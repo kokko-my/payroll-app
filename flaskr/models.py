@@ -119,7 +119,10 @@ class UserWorktime(db.Model):
     create_at = db.Column(db.DateTime, default=datetime.now)
     update_at = db.Column(db.DateTime, default=datetime.now)
 
-    def __init__(self, user_id, workplace, start_date, end_date, start_time, end_time, break_start_time=0.0, break_end_time=0.0):
+    def __init__(
+        self, user_id, workplace, start_date, end_date, start_time, end_time,
+        break_start_time=0.0, break_end_time=0.0
+    ):
         self.user_id = user_id
         self.workplace = workplace
         self.start_date = start_date

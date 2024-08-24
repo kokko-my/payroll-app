@@ -1,19 +1,17 @@
 # flaskr/forms.py
-import datetime
 from flask_wtf import FlaskForm
 from wtforms.fields import (
     SubmitField, StringField, IntegerField,
     SelectField, RadioField, PasswordField,
-    DateField,
 )
 from wtforms.validators import (
-    DataRequired, Email, EqualTo, ValidationError, InputRequired,
+    DataRequired, Email, EqualTo, ValidationError
 )
 from flask_login import current_user
 from flaskr.models import User
 
 from flaskr.utils.datetime_operation import (
-    get_now_month, get_now_day, get_days_in_month
+    get_now_month, get_now_day
 )
 
 # ログインフォーム
