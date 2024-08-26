@@ -87,6 +87,7 @@ class UserWorkplace(db.Model):
     name = db.Column(db.Text)
     deadline = db.Column(db.Integer)
     hourly = db.Column(db.Integer)
+    weekend_hourly = db.Column(db.Integer)  #   いったんは金土
     create_at = db.Column(db.DateTime, default=datetime.now)
     update_at = db.Column(db.DateTime, default=datetime.now)
 
