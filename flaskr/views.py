@@ -8,7 +8,7 @@ from flaskr.forms import (
     LoginForm, RegisterForm, WorkplaceForm, WorktimeForm
 )
 from flaskr.models import (
-    User, PasswordResetToken, UserWorkplace, UserWorktime
+    User, UserWorkplace, UserWorktime
 )
 from flask_login import (
     login_user, logout_user, current_user,
@@ -25,7 +25,6 @@ bp = Blueprint('app', __name__, url_prefix='')
 def home():
     if not current_user.is_authenticated:
         return render_template('home.html')
-
     worktimes = current_user.worktime.all()
     total_salary = 0
     for worktime in worktimes:

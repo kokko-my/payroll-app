@@ -73,28 +73,28 @@ class WorktimeForm(FlaskForm):
         choices=[(d, str(d)) for d in range(1, 31)], coerce=int, default=get_now_day()
     )
     start_hour = SelectField(
-        choices=[(h, str(h)) for h in range(0, 24)], coerce=int
+        choices=[(h, str(f'{h:02}')) for h in range(0, 24)], coerce=int
     )
     start_minute = SelectField(
-        choices=[(m, str(m)) for m in range(0, 60)], coerce=int
+        choices=[(m, str(f'{m:02}')) for m in range(0, 60)], coerce=int
     )
     end_hour = SelectField(
-        choices=[(h, str(h)) for h in range(0, 24)], coerce=int
+        choices=[(h, str(f'{h:02}')) for h in range(0, 24)], coerce=int
     )
     end_minute = SelectField(
-        choices=[(m, str(m)) for m in range(0, 60)], coerce=int
+        choices=[(m, str(f'{m:02}')) for m in range(0, 60)], coerce=int
     )
     break_start_hour = SelectField(
-        choices=[(h, str(h)) for h in range(0, 24)], coerce=int
+        choices=[(h, str(f'{h:02}')) for h in range(0, 24)], coerce=int
     )
     break_start_minute = SelectField(
-        choices=[(m, str(m)) for m in range(0, 60)], coerce=int
+        choices=[(m, str(f'{m:02}')) for m in range(0, 60)], coerce=int
     )
     break_end_hour = SelectField(
-        choices=[(h, str(h)) for h in range(0, 24)], coerce=int
+        choices=[(h, str(f'{h:02}')) for h in range(0, 24)], coerce=int
     )
     break_end_minute = SelectField(
-        choices=[(m, str(m)) for m in range(0, 60)], coerce=int
+        choices=[(m, str(f'{m:02}')) for m in range(0, 60)], coerce=int
     )
     break_radio = RadioField(
         '休憩: ', choices=[('0', 'なし'), ('1', 'あり')], default='0'
