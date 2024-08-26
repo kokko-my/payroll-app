@@ -34,7 +34,7 @@ def home():
         workday_year, workday_month, workday_day = map(int, (worktime.work_date).split('-'))
         weekday_name = get_weekday_name(workday_year, workday_month, workday_day)
         hourly = workplace.hourly
-        if weekday_name == 'Fri' or weekday_name == 'Sat':
+        if (weekday_name == 'Fri' or weekday_name == 'Sat') and workplace.weekend_hourly is not None:
             hourly = workplace.weekend_hourly
         salary = calc_total_salary(
             hourly,
@@ -95,7 +95,8 @@ def regist_workplace():
             user_id = current_user.get_id(),
             name = form.name.data,
             deadline = form.deadline.data,
-            hourly = form.hourly.data
+            hourly = form.hourly.data,
+            weekend_hourly = form.weekend_hourly.data
         )
         workplace.create_new_workplace()
         db.session.commit()

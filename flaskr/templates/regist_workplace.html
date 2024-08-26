@@ -12,6 +12,8 @@
         {{ render_field(form.name) }}
         {{ form.hourly.label }} {{ form.hourly() }}円
         <br>
+        {{ form.weekend_hourly.label }} {{ form.weekend_hourly() }}円
+        <br>
         {{ form.deadline.label }} 毎月{{ form.deadline() }}
         <br>
         {{ form.submit }}

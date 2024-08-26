@@ -53,6 +53,9 @@ class WorkplaceForm(FlaskForm):
     hourly = IntegerField(
         '時給: ', validators=[DataRequired()]
     )
+    weekend_hourly = IntegerField(
+        '休日の時給: ', validators=[DataRequired()]
+    )
     deadline = SelectField(
         '締日: ', choices=[(d, str(d) + '日') for d in range(1, 31)] + [(31, '月末')],
         coerce=int, validators=[DataRequired()]
