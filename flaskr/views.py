@@ -112,6 +112,7 @@ def worktime():
     form = WorktimeForm(request.form)
     form.workplace.choices = [(wp.name, wp.name) for wp in current_user.workplaces.all()]
     if request.method == 'POST' and form.validate():
+        work_year = form.work_year.data
         work_month = form.work_month.data
         work_day = form.work_day.data
         start_hour = form.start_hour.data
@@ -129,7 +130,7 @@ def worktime():
         worktime = UserWorktime(
             user_id = current_user.get_id(),
             workplace = form.workplace.data,
-            work_date = date(get_now_year(), work_month, work_day),
+            work_date = date(work_year, work_month, work_day),
             start_time = convert_time_to_float(start_hour, start_minute),
             end_time = convert_time_to_float(end_hour, end_minute),
             break_start_time = convert_time_to_float(break_start_hour, break_start_minute),

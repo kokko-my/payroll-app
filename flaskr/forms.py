@@ -10,9 +10,7 @@ from wtforms.validators import (
 from flask_login import current_user
 from flaskr.models import User
 
-from flaskr.utils.datetime_operation import (
-    get_now_month, get_now_day, convert_time_to_float
-)
+from flaskr.utils.datetime_operation import *
 
 # ログインフォーム
 class LoginForm(FlaskForm):
@@ -65,6 +63,10 @@ class WorkplaceForm(FlaskForm):
 class WorktimeForm(FlaskForm):
     workplace = SelectField(
         '勤務先: ', choices=[]
+    )
+    work_year = SelectField(
+        choices=[(y, str(y)) for y in range(get_now_year() - 3, get_now_year() + 2)],
+        coerce=int, default=get_now_year()
     )
     work_month = SelectField(
         choices=[(m, str(m)) for m in range(1, 13)], coerce=int, default=get_now_month()

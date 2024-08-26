@@ -12,6 +12,5 @@ def get_now_month():
 def get_now_day():
     return datetime.datetime.now().day
 
-def get_days_in_month(month):
-    _, days_in_month = calendar.monthrange(get_now_year(), month)
-    return days_in_month
+def get_days_in_month(year, month):
+    return calendar.monthrange(year, month)[1]
