@@ -3,6 +3,11 @@ import datetime, calendar
 def convert_time_to_float(hour, minute):
     return hour + (minute / 60)
 
+def convert_float_to_time(time):
+    hour = int(time)
+    minute = (time - int(time)) * 60
+    return hour, minute
+
 def get_now_year():
     return datetime.datetime.now().year
 

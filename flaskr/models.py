@@ -132,3 +132,6 @@ class UserWorktime(db.Model):
 
     def create_new_worktime(self):
         db.session.add(self)
+
+    def delete_worktime(self):
+        db.session.delete(self)

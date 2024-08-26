@@ -1,0 +1,67 @@
+{% from '_formhelpers.html' import render_field %}
+{% extends 'base.html' %}
+{% block title %}
+    勤務時間編集 - {{ super() }}
+{% endblock %}
+{% block content %}
+<p>出勤・退勤時刻を入力してください。</p>
+<div class="row">
+    <form method="POST">
+        {{ form.csrf_token }}
+        {{ form.workplace.label }}
+        {{ form.workplace }}
+        <br>
+        出勤日:
+        {{ form.work_year }}年
+        {{ form.work_month }}月
+        {{ form.work_day }}日
+        <br>
+        出勤時刻:
+        {{ form.start_hour }}時
+        {{ form.start_minute }}分
+        <br>
+        退勤時刻:
+        {{ form.end_hour }}時
+        {{ form.end_minute }}分
+        <br>
+        {{ form.break_radio.label }}
+        {{ form.break_radio() }}
+        <div id="break", style="display: none;">
+            休憩開始時刻:
+            {{ form.break_start_hour }}時
+            {{ form.break_start_minute }}分
+            <br>
+            休憩終了時刻:
+            {{ form.break_end_hour }}時
+            {{ form.break_end_minute }}分
+            <br>
+        </div>
+        <br>
+            {% for message in get_flashed_messages() %}
+            {{ message }}
+            {% endfor %}
+        <br>
+        {{ form.submit }}
+        <a href="{{ url_for('app.deleat_worktime', worktime_id=worktime.id) }}">削除</a>
+    </form>
+</div>
+
+<script>
+    const radios = document.querySelectorAll('input[name="break_radio"]');
+    radios.forEach(radio => {
+        radio.addEventListener('change', () => toggleInputField());
+    });
+
+    function toggleInputField() {
+        const input_field = document.getElementById('break');
+        const selected_radio = document.querySelector('input[name="break_radio"]:checked');
+        if (selected_radio && selected_radio.value === '1') {
+            input_field.style.display = 'block';
+        } else {
+            input_field.style.display = 'none';
+        }
+    }
+    toggleInputField();
+</script>
+
+{% endblock %}

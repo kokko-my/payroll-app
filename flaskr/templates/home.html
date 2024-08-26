@@ -21,7 +21,7 @@
             {% else %}
                 （休憩：{{ worktime.break_start_time | convert_float_to_time }} ～ {{ worktime.break_end_time | convert_float_to_time }}）
             {% endif %}
-            <a href="{{ url_for('app.deleat_worktime', worktime_id=worktime.id) }}">削除</a>
+            <a href="{{ url_for('app.edit_worktime', worktime_id=worktime.id) }}">編集</a>
         </li>
         {% endfor %}
     {% endif %}
