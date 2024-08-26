@@ -27,24 +27,23 @@ class NightSalary(Salary):
     NIGHT_END_TIME = 5.0
     NIGHT_SURCHARGE_RATE = 0.25
 
-    def __calc_night_worktime(self):
-        start_time = self.start_time
-        end_time = self.end_time
-        if self.NIGHT_END_TIME <= start_time <= self.NIGHT_START_TIME:
-            if end_time <= self.NIGHT_START_TIME:
+    def __calc_night_worktime(self, start, end):
+        if self.NIGHT_END_TIME <= start <= self.NIGHT_START_TIME:
+            if end <= self.NIGHT_START_TIME:
                 return 0
-            elif end_time <= self.NIGHT_END_TIME + 24:
-                return end_time - self.NIGHT_START_TIME
+            elif end <= self.NIGHT_END_TIME + 24:
+                return end - self.NIGHT_START_TIME
             else:
                 return self.NIGHT_END_TIME + 24 - self.NIGHT_START_TIME
         else:
-            if end_time <= self.NIGHT_END_TIME + 24:
-                return end_time - start_time
+            if end <= self.NIGHT_END_TIME + 24:
+                return end - start
             else:
-                return self.NIGHT_END_TIME + 24 - start_time
+                return self.NIGHT_END_TIME + 24 - start
 
     def calc_salary(self):
-        return self.hourly_wage * self.NIGHT_SURCHARGE_RATE * self.__calc_night_worktime()
+        return self.hourly_wage * self.NIGHT_SURCHARGE_RATE \
+            * self.__calc_night_worktime(self.start_time, self.end_time)
 
 class OvertimeSalary(Salary):
     # 時間外労働の時給で計算
@@ -60,10 +59,9 @@ class OvertimeSalary(Salary):
             * (end_time - start_time - self.LEGAL_WORKING_HOURS - break_time)
 
 def calc_total_salary(hourly, start_time, end_time, break_start_time, break_end_time):
-    return NormalSalary(hourly, start_time, end_time).calc_salary() \
-        + NightSalary(hourly, start_time, end_time).calc_salary() \
-        + OvertimeSalary(hourly, start_time, end_time).calc_salary(break_end_time - break_start_time) \
-        - (
-            NormalSalary(hourly, break_start_time, break_end_time).calc_salary() \
-            + NightSalary(hourly, break_start_time, break_end_time).calc_salary()
-        )
+    normal_salary = NormalSalary(hourly, start_time, end_time).calc_salary()
+    night_salary = NightSalary(hourly, start_time, end_time).calc_salary()
+    over_salary = OvertimeSalary(hourly, start_time, end_time).calc_salary(break_end_time - break_start_time)
+    break_salary = NormalSalary(hourly, break_start_time, break_end_time).calc_salary() \
+                    + NightSalary(hourly, break_start_time, break_end_time).calc_salary()
+    return normal_salary + night_salary + over_salary - break_salary
