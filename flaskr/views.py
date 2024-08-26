@@ -31,8 +31,13 @@ def home():
         workplace = UserWorkplace.select_workplace_by_name(worktime.workplace)
         if workplace is None:
             continue
+        workday_year, workday_month, workday_day = map(int, (worktime.work_date).split('-'))
+        weekday_name = get_weekday_name(workday_year, workday_month, workday_day)
+        hourly = workplace.hourly
+        if weekday_name == 'Fri' or weekday_name == 'Sat':
+            hourly = workplace.weekend_hourly
         salary = calc_total_salary(
-            workplace.hourly,
+            hourly,
             worktime.start_time,
             worktime.end_time,
             worktime.break_start_time,

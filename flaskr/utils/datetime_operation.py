@@ -19,3 +19,9 @@ def get_now_day():
 
 def get_days_in_month(year, month):
     return calendar.monthrange(year, month)[1]
+
+def get_weekday_name(year, month, day):
+    date_obj = datetime.date(year, month, day)
+    weekday_num = date_obj.weekday()
+    weekdays = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun']
+    return weekdays[weekday_num]

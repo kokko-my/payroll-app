@@ -91,11 +91,12 @@ class UserWorkplace(db.Model):
     create_at = db.Column(db.DateTime, default=datetime.now)
     update_at = db.Column(db.DateTime, default=datetime.now)
 
-    def __init__(self, user_id, name, deadline, hourly):
+    def __init__(self, user_id, name, deadline, hourly, weekend_hourly):
         self.user_id = user_id
         self.name = name
         self.deadline = deadline
         self.hourly = hourly
+        self.weekend_hourly = weekend_hourly
 
     def create_new_workplace(self):
         db.session.add(self)
